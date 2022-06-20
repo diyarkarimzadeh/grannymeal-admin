@@ -1,15 +1,60 @@
 import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Box, Container, Grid, Pagination } from '@mui/material';
 import { products } from '../__mocks__/products';
 import { ProductListToolbar } from '../components/product/product-list-toolbar';
 import { ProductCard } from '../components/product/product-card';
 import { DashboardLayout } from '../components/dashboard-layout';
 
-const Products = () => (
+const Products = () => {
+
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+
+      var data = JSON.stringify({
+        "pageSize": 10000,
+        "pageNumber": 0,
+        "orderBy": "id",
+        "orderType": 0,
+        "deliveryDate": "",
+        "orderFilter": 1
+      });
+
+      var config = {
+        method: 'post',
+        url: 'https://cateringtest.grannymeal.com/api/v1/Admin/GetOrders',
+        headers: { 
+          'accept': 'application/json', 
+          'Culture': 'en-US', 
+          'Content-Type': 'application/json', 
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        data : data
+      };
+
+      axios(config)
+      .then(function (response) {
+        console.log(response.data);
+        setOrders(response.data.data.rows);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    
+  }, []);
+
+  console.log(orders)
+
+
+
+return (
   <>
     <Head>
       <title>
-        Products | Material Kit
+        Orders
       </title>
     </Head>
     <Box
@@ -26,15 +71,15 @@ const Products = () => (
             container
             spacing={3}
           >
-            {products.map((product) => (
+            {orders.map((order, index) => (
               <Grid
                 item
-                key={product.id}
-                lg={4}
-                md={6}
+                key={order[index]}
+                lg={12}
+                md={12}
                 xs={12}
               >
-                <ProductCard product={product} />
+                <ProductCard order={order} />
               </Grid>
             ))}
           </Grid>
@@ -48,7 +93,7 @@ const Products = () => (
         >
           <Pagination
             color="primary"
-            count={3}
+            count={5}
             size="small"
           />
         </Box>
@@ -56,6 +101,7 @@ const Products = () => (
     </Box>
   </>
 );
+        };
 
 Products.getLayout = (page) => (
   <DashboardLayout>

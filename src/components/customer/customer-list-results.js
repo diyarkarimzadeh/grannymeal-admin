@@ -17,16 +17,16 @@ import {
 } from '@mui/material';
 import { getInitials } from '../../utils/get-initials';
 
-export const CustomerListResults = ({ customers, ...rest }) => {
+export const CustomerListResults = ({ users, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(500);
   const [page, setPage] = useState(0);
 
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = customers.map((customer) => customer.id);
+      newSelectedCustomerIds = users.map((user) => user.id);
     } else {
       newSelectedCustomerIds = [];
     }
@@ -71,23 +71,23 @@ export const CustomerListResults = ({ customers, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedCustomerIds.length === customers.length}
+                    checked={selectedCustomerIds.length === users.length}
                     color="primary"
                     indeterminate={
                       selectedCustomerIds.length > 0
-                      && selectedCustomerIds.length < customers.length
+                      && selectedCustomerIds.length < users.length
                     }
                     onChange={handleSelectAll}
                   />
                 </TableCell>
                 <TableCell>
-                  Name
+                  First Name
+                </TableCell>
+                <TableCell>
+                  ID
                 </TableCell>
                 <TableCell>
                   Email
-                </TableCell>
-                <TableCell>
-                  Location
                 </TableCell>
                 <TableCell>
                   Phone
@@ -98,16 +98,16 @@ export const CustomerListResults = ({ customers, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
+              {users.slice(0, limit).map((user) => (
                 <TableRow
                   hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
+                  key={user.id}
+                  selected={selectedCustomerIds.indexOf(user.id) !== -1}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
+                      checked={selectedCustomerIds.indexOf(user.id) !== -1}
+                      onChange={(event) => handleSelectOne(event, user.id)}
                       value="true"
                     />
                   </TableCell>
@@ -119,30 +119,30 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                       }}
                     >
                       <Avatar
-                        src={customer.avatarUrl}
+                        src={user.avatar}
                         sx={{ mr: 2 }}
                       >
-                        {getInitials(customer.name)}
+                        {getInitials(user.firstName)}
                       </Avatar>
                       <Typography
                         color="textPrimary"
                         variant="body1"
                       >
-                        {customer.name}
+                        {user.firstName} {user.lastName}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.email}
+                    {user.id}
                   </TableCell>
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                    {user.email}
                   </TableCell>
                   <TableCell>
-                    {customer.phone}
+                    {user.phoneNumber}
                   </TableCell>
                   <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                    {user.createdDate}
                   </TableCell>
                 </TableRow>
               ))}
@@ -150,15 +150,15 @@ export const CustomerListResults = ({ customers, ...rest }) => {
           </Table>
         </Box>
       </PerfectScrollbar>
-      <TablePagination
+      {/* <TablePagination
         component="div"
-        count={customers.length}
+        count={users.length}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}
         rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
+        rowsPerPageOptions={[100, 200]}
+      /> */}
     </Card>
   );
 };

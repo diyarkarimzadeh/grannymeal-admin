@@ -42,7 +42,7 @@ const items = [
     title: 'Users'
   },
   {
-    href: '/account',
+    href: '/chefs',
     icon: (<Cook fontSize="small" />),
     title: 'Cooks'
   },
@@ -52,7 +52,7 @@ const items = [
     title: 'Meals'
   },
   {
-    href: '/login',
+    href: '/categories',
     icon: (<Categories fontSize="small" />),
     title: 'Categories'
   },
